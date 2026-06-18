@@ -1,0 +1,22 @@
+{
+  "name": "humaner",
+  "version": "1.0.0",
+  "description": "Bộ skill onboarding cho nhân viên The Human Inc / Wealify — 3 cửa hỏi-đáp đóng gói sẵn: ask-agent (hệ thống & công cụ AI), ask-hr (công ty & chính sách), lark (thao tác Lark). Kèm hướng dẫn dùng Cowork cho người không phải dev.",
+  "author": {
+    "name": "The Human Inc"
+  },
+  "homepage": "https://github.com/thehuman-agent/humaner-skills",
+  "repository": "https://github.com/thehuman-agent/humaner-skills",
+  "license": "UNLICENSED",
+  "keywords": [
+    "onboarding",
+    "the-human-inc",
+    "wealify",
+    "lark",
+    "antigravity",
+    "claude-code",
+    "cowork",
+    "hr",
+    "ask-agent"
+  ]
+}

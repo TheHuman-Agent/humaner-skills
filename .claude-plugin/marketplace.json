@@ -1,0 +1,14 @@
+{
+  "name": "humaner-skills",
+  "owner": {
+    "name": "The Human Inc"
+  },
+  "description": "Marketplace nội bộ The Human Inc — plugin onboarding & bộ skill dùng chung cho nhân viên (Cowork / Claude Code).",
+  "plugins": [
+    {
+      "name": "humaner",
+      "source": "./",
+      "description": "3 cửa hỏi-đáp đóng gói sẵn (ask-agent · ask-hr · lark) + hướng dẫn dùng Cowork cho người không phải dev."
+    }
+  ]
+}

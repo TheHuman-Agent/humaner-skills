@@ -1,0 +1,16 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Secrets — KHÔNG commit credentials
+*.env
+.env*
+*secret*
+*credentials*
+
+# Harness scheduled-task lock
+.claude/
