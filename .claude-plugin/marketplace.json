@@ -8,7 +8,7 @@
     {
       "name": "humaner",
       "source": "./",
-      "description": "3 cửa hỏi-đáp đóng gói sẵn (ask-agent · ask-hr · lark) + hướng dẫn dùng Cowork cho người không phải dev."
+      "description": "3 cửa hỏi-đáp đóng gói sẵn (ask-agent · ask-hr · lark) + data-ingest (nạp & tra cứu Data-Center) + hướng dẫn dùng Cowork cho người không phải dev."
     }
   ]
 }
