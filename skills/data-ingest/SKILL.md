@@ -1,6 +1,6 @@
 ---
 name: data-ingest
-description: Đẩy tài liệu lên Data-Center (RAG nội bộ) và tra cứu lại, đúng luật phân cấp mật của công ty. Gửi file, rồi đọc phán quyết cấp mật kèm dẫn chứng do server tự quyết. Kích hoạt khi user muốn nạp tài liệu vào Data-center, đẩy file lên RAG, hỏi dữ liệu nội bộ công ty, hoặc gọi @data-ingest / /data-ingest.
+description: Đẩy tài liệu lên Data-Center (RAG nội bộ) và tra cứu lại, đúng luật phân cấp mật của công ty. Gửi file, rồi đọc phán quyết cấp mật kèm dẫn chứng do server tự quyết. Kích hoạt khi user muốn nạp tài liệu vào Data-center, đẩy file lên RAG, hỏi dữ liệu nội bộ công ty, hoặc gọi @data-ingest / /data-ingest. Cũng kích hoạt khi user đưa file Chia-khoa-Data-Center-*.txt, dán chuỗi bắt đầu bằng rag_, hoặc nhờ "cài chìa khoá Data-Center" — skill tự cài chìa khoá vào máy.
 ---
 
 # data-ingest — Cửa nạp & tra cứu Data-Center
@@ -35,7 +35,7 @@ curl -sf -H "Authorization: Bearer $RAG_TOKEN" "$RAG_URL/api/policy" \
 > pre-flight sẽ báo an toàn giả rồi chết ở bước gửi file. `/api/policy` là
 > endpoint token-gated duy nhất mà skill này chạm tới.
 
-- **Thiếu `RAG_TOKEN`** → dừng, bảo user xin admin cấp token (tab *Token API* trên web Data-center). Mỗi người/agent **một token riêng**, không dùng chung.
+- **Thiếu `RAG_TOKEN`** → **đừng dừng, đừng bắt user gõ lệnh.** Sang thẳng mục *🔑 Nhận chìa khoá lần đầu* ngay dưới — user chỉ cần kéo thả file `.txt` được phát qua Lark. Chưa có file thì bảo họ nhắn admin xin. Mỗi người/agent **một chìa khoá riêng**, không dùng chung.
 - Token lưu ở **env file private ngoài repo** (mode 600) hoặc macOS Keychain — **không hardcode, không commit**.
 
 ```bash
@@ -47,6 +47,73 @@ export RAG_TOKEN="rag_<squad>_..."
 Token đã mang sẵn **squad**, **phòng ban (chapter)** và **clearance**. Không cần (và không được) tự khai — server lấy hết từ token.
 
 ---
+
+## 🔑 Nhận chìa khoá lần đầu (file `.txt` từ Lark)
+
+Người dùng trong công ty **không gõ lệnh**. Họ được phát một file
+`Chia-khoa-Data-Center-<MÃ NV>.txt` qua Lark, rồi kéo thả file đó vào chat kèm câu kiểu
+*"cài giúp mình chìa khoá này"*. **Skill tự cài.** Đây là đường vào chuẩn — đừng bắt
+user tự mở terminal sửa file env.
+
+**Kích hoạt khi:** thiếu `$RAG_TOKEN`, **hoặc** user đính kèm file tên `Chia-khoa-Data-Center*`,
+**hoặc** trong thứ user đưa có chuỗi khớp `rag_[a-z0-9]+_[A-Za-z0-9_-]{20,}`.
+
+### Bốn bước, không tắt bước nào
+
+**1. Lấy chìa khoá ra khỏi file.** Đọc file, bắt chuỗi `rag_...`. Không thấy → hỏi lại
+user, **đừng đoán, đừng bịa**.
+
+**2. Kiểm TRƯỚC khi ghi.** Chưa xác nhận chìa khoá sống thì không được đụng vào file env
+— ghi đè bằng chìa khoá hỏng là phá luôn cấu hình đang chạy được.
+
+```bash
+RAG_URL="https://rag.wealify.app"
+curl -s -H "Authorization: Bearer $KEY" "$RAG_URL/api/policy"
+```
+
+Có `"caller"` → sống, đi tiếp. `401` hoặc rỗng → **dừng, không ghi gì cả**, bảo user nhắn
+admin xin chìa khoá mới (rất có thể đã bị thu hồi hoặc phát nhầm bản cũ).
+
+**3. Ghi vào máy.** macOS/Linux — idempotent, chạy lại lần hai không nhân đôi dòng:
+
+```bash
+mkdir -p ~/.config/agent-cron && chmod 700 ~/.config/agent-cron
+ENV=~/.config/agent-cron/env
+touch "$ENV"
+grep -v -e '^export RAG_URL=' -e '^export RAG_TOKEN=' "$ENV" > "$ENV.tmp" && mv "$ENV.tmp" "$ENV"
+printf 'export RAG_URL="%s"\nexport RAG_TOKEN="%s"\n' "$RAG_URL" "$KEY" >> "$ENV"
+chmod 600 "$ENV"
+grep -q 'agent-cron/env' ~/.zshrc 2>/dev/null || \
+  echo '[ -f ~/.config/agent-cron/env ] && . ~/.config/agent-cron/env' >> ~/.zshrc
+```
+
+Windows (PowerShell) — nhắc user **đóng hẳn cửa sổ rồi mở lại** mới có hiệu lực:
+
+```powershell
+[Environment]::SetEnvironmentVariable("RAG_URL","https://rag.wealify.app","User")
+[Environment]::SetEnvironmentVariable("RAG_TOKEN","<CHÌA KHOÁ>","User")
+```
+
+**4. Báo lại + dọn.** Lấy `caller` từ bước 2 nói cho user biết họ đứng tên gì:
+
+> ✅ Đã cài xong. Bạn đang đứng tên squad **va**, chapter **sales**, đọc được tới **cấp 2
+> (Nội bộ)**, được **hỏi & nạp tài liệu**.
+
+Rồi nhắc đúng hai câu:
+
+- File `.txt` đó chứa chìa khoá thật → **cất chỗ kín hoặc xoá đi**, đừng để lay lắt trong
+  thư mục dự án.
+- File đang nằm trong một thư mục git → **cảnh báo ngay**, bảo họ chuyển ra ngoài trước
+  khi commit. Đây đúng là cách `shared-guard` đã làm lộ App Secret.
+
+### Cấm
+
+- **Không in chìa khoá ra chat, ra log, ra tên biến hiển thị.** Cần cho user đối chiếu thì
+  nhắc tối đa 12 ký tự đầu: `rag_va_8Kd2…`
+- **Không ghi chìa khoá vào bất kỳ file nào trong thư mục làm việc** — chỉ
+  `~/.config/agent-cron/env` (macOS/Linux) hoặc biến môi trường User (Windows).
+- **Không tự sinh, không tự đoán, không tái dùng chìa khoá của người khác.** Mỗi người một
+  cái, và mọi câu hỏi đều ghi audit log dưới tên chủ chìa khoá.
 
 ## Bước 1 — Xem mình là ai (pre-flight đã gọi)
 
@@ -203,7 +270,7 @@ Hỏi không ra thì trước khi kết luận "kho không có", kiểm ba khả
 
 | Triệu chứng | Nghĩa là | Làm gì |
 |---|---|---|
-| `401 Token không hợp lệ` | Token sai / đã thu hồi | Xin admin cấp lại |
+| `401 Token không hợp lệ` | Chìa khoá sai / đã thu hồi | Xin admin phát lại file `.txt`, rồi cài theo mục *🔑 Nhận chìa khoá lần đầu* |
 | `401 Token hết hạn` | Quá hạn. Cấp qua API thì **mặc định 90 ngày**; admin vẫn cấp được token vĩnh viễn (`expires_days: null`) nên đừng đoán hạn theo ngày tạo — hỏi admin. | Xin admin gia hạn |
 | `403 Token không có quyền ingest` | Token chỉ `query` | Xin token `query+ingest` |
 | `400 Định dạng không được phép` | Đuôi file ngoài danh sách | Đổi sang PDF/DOCX/ảnh |
