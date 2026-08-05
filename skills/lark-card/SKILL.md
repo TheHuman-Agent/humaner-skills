@@ -244,8 +244,23 @@ cũng biết nằm ở trường `enterprise_email`, và **Lark không tra đư�
 Cái thứ hai mới nguy: báo thành công mà không ra ai. Gửi hàng loạt sẽ chạy êm rồi
 in "đã gửi xong" trong khi 31/43 người không nhận được gì.
 
-**Luôn tra `open_id` trước rồi mới gửi.** Cách quét đủ, không sót người chưa gán
-phòng ban, nằm ở **`resources/tim-nguoi-va-gui.md`** — đọc trước khi gửi hàng loạt.
+**Luôn tra `open_id` trước rồi mới gửi.**
+
+Đừng viết lại từ đầu — **`resources/gui_lark.py`** làm sẵn: quét danh bạ (kể cả
+người chưa gán phòng), dựng bảng tra từ cả hai trường email + mã NV + SĐT + tên
+bỏ dấu, mặc định **chạy thử**, và luôn trả về danh sách **`truot`** = ai không
+tra được.
+
+```python
+from gui_lark import Lark
+lark = Lark(app_id, app_secret)
+kq = lark.gui_hang_loat(["a@congty.com", "b@congty.com"], card, that=True)
+print(kq["truot"])          # ⬅ kiểm cái này TRƯỚC khi báo "đã gửi xong"
+```
+
+Đã chạy thật: gửi bằng email công ty (`enterprise_email`) — cái mà gửi thẳng thì
+400 — qua module này thì tới nơi. Lý do và số liệu ở
+**`resources/tim-nguoi-va-gui.md`**.
 
 ### Sửa thẻ ĐÃ gửi
 
