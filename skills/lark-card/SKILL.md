@@ -232,6 +232,21 @@ curl -s -X POST "https://open.larksuite.com/open-apis/im/v1/messages?receive_id_
 Dựng payload bằng `json.dumps` chứ đừng nối chuỗi tay — tiếng Việt có dấu và ký
 tự xuống dòng sẽ phá cú pháp.
 
+### ⛔ Gửi bằng email — bẫy lớn nhất
+
+`receive_id_type: "email"` **chỉ chạy với 12/43 người**. Email công ty mà ai
+cũng biết nằm ở trường `enterprise_email`, và **Lark không tra được bằng trường
+đó**. Đo thật:
+
+- Gửi thẳng tới `kiennt@thehumaninc.com` → **HTTP 400**
+- `batch_get_id` với `enterprise_email` → **`code: 0` "success" nhưng rỗng**
+
+Cái thứ hai mới nguy: báo thành công mà không ra ai. Gửi hàng loạt sẽ chạy êm rồi
+in "đã gửi xong" trong khi 31/43 người không nhận được gì.
+
+**Luôn tra `open_id` trước rồi mới gửi.** Cách quét đủ, không sót người chưa gán
+phòng ban, nằm ở **`resources/tim-nguoi-va-gui.md`** — đọc trước khi gửi hàng loạt.
+
 ### Sửa thẻ ĐÃ gửi
 
 `config.update_multi: true` cho phép cập nhật tại chỗ qua
