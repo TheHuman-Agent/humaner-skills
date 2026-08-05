@@ -1,9 +1,18 @@
 ---
 name: data-ingest
-description: Đẩy tài liệu lên Data-Center (RAG nội bộ) và tra cứu lại, đúng luật phân cấp mật của công ty. Gửi file, rồi đọc phán quyết cấp mật kèm dẫn chứng do server tự quyết. Kích hoạt khi user muốn nạp tài liệu vào Data-center, đẩy file lên RAG, hỏi dữ liệu nội bộ công ty, hoặc gọi @data-ingest / /data-ingest. Cũng kích hoạt khi user đưa file Chia-khoa-Data-Center-*.txt, dán chuỗi bắt đầu bằng rag_, hoặc nhờ "cài chìa khoá Data-Center" — skill tự cài chìa khoá vào máy.
+description: Đẩy tài liệu lên Data-Center (RAG nội bộ) và tra cứu lại, đúng luật phân cấp mật của công ty. Gửi file, rồi đọc phán quyết cấp mật kèm dẫn chứng do server tự quyết. Kích hoạt khi user muốn nạp tài liệu vào Data-center, đẩy file lên RAG, hỏi dữ liệu nội bộ công ty, hoặc gọi @data-ingest / /data-ingest. Cũng kích hoạt khi user đưa file Chia-khoa-Data-Center-*.txt, dán chuỗi bắt đầu bằng rag_, hoặc nhờ "cài chìa khoá Data-Center" — skill tự cài chìa khoá vào máy. Và khi user hỏi Data-Center / rag.wealify.app là gì, làm được gì, có hỏi được X không, kho đang có gì, sao không tìm thấy tài liệu — đọc resources/tinh-nang-data-center.md rồi trả lời.
 ---
 
 # data-ingest — Cửa nạp & tra cứu Data-Center
+
+> 📖 **User hỏi hệ thống LÀM ĐƯỢC GÌ → đọc [`resources/tinh-nang-data-center.md`](resources/tinh-nang-data-center.md) trước khi trả lời.**
+> File đó mô tả đầy đủ tính năng, số liệu kho hiện tại, và **những thứ hệ thống
+> chưa làm được**. Đọc nó khi user hỏi kiểu *"Data-Center là gì"*, *"rag.wealify.app
+> làm được gì"*, *"có hỏi được X không"*, *"kho đang có bao nhiêu tài liệu"*,
+> *"sao em không tìm thấy"*, *"sao vào web nó đòi đăng nhập"*. **Đừng trả lời
+> bằng suy đoán** — hứa tính năng không có làm user mất công đi tìm.
+>
+> SKILL.md này là *cách dùng* (cú pháp, quy trình). File kia là *năng lực và giới hạn*.
 
 Data-Center là kho tri thức chung của công ty. Mọi phòng đẩy tài liệu vào, mọi người tra cứu ra — nhưng **dữ liệu bị cô lập theo phòng ban và theo cấp mật**, nên nạp sai cấp là hoặc chặn oan, hoặc lộ hàng.
 
