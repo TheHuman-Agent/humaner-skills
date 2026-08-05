@@ -1,0 +1,220 @@
+{
+  "_huong_dan": "Mẫu thẻ thông báo Lark. Thay mọi chỗ {{...}} rồi json.dumps thành chuỗi, gửi với msg_type=interactive. Xoá khoá _huong_dan trước khi gửi.",
+  "schema": "2.0",
+  "config": {
+    "wide_screen_mode": true,
+    "update_multi": true
+  },
+  "header": {
+    "title": {
+      "tag": "plain_text",
+      "content": "{{EMOJI}} {{TIEU_DE}}"
+    },
+    "subtitle": {
+      "tag": "plain_text",
+      "content": "{{TEN_NGUOI_NHAN}} · {{BOI_CANH}}"
+    },
+    "template": "turquoise"
+  },
+  "body": {
+    "elements": [
+      {
+        "tag": "markdown",
+        "content": "Chào **{{TEN_NGUOI_NHAN}}** 👋\n\n{{CAU_MO_DAU_NOI_THANG_VIEC_CAN_LAM}}"
+      },
+      {
+        "tag": "column_set",
+        "horizontal_spacing": "8px",
+        "columns": [
+          {
+            "tag": "column",
+            "width": "weighted",
+            "weight": 1,
+            "background_style": "grey-50",
+            "padding": "8px",
+            "vertical_spacing": "2px",
+            "elements": [
+              {
+                "tag": "markdown",
+                "content": "**{{NHAN_1}}**\n{{GIA_TRI_1}}"
+              }
+            ]
+          },
+          {
+            "tag": "column",
+            "width": "weighted",
+            "weight": 1,
+            "background_style": "grey-50",
+            "padding": "8px",
+            "vertical_spacing": "2px",
+            "elements": [
+              {
+                "tag": "markdown",
+                "content": "**{{NHAN_2}}**\n{{GIA_TRI_2}}"
+              }
+            ]
+          },
+          {
+            "tag": "column",
+            "width": "weighted",
+            "weight": 1,
+            "background_style": "grey-50",
+            "padding": "8px",
+            "vertical_spacing": "2px",
+            "elements": [
+              {
+                "tag": "markdown",
+                "content": "**{{NHAN_3}}**\n{{GIA_TRI_3}}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tag": "markdown",
+        "content": "⏳ Hạn: **{{HAN_CHOT}}**"
+      },
+      {
+        "tag": "hr"
+      },
+      {
+        "tag": "collapsible_panel",
+        "expanded": false,
+        "background_color": "yellow-50",
+        "border": {
+          "color": "yellow",
+          "corner_radius": "6px"
+        },
+        "vertical_spacing": "8px",
+        "padding": "8px 12px 12px 12px",
+        "header": {
+          "title": {
+            "tag": "markdown",
+            "content": "**🔐 Bấm để hiện {{TEN_THONG_TIN_NHAY_CAM}}**"
+          },
+          "vertical_align": "center",
+          "padding": "4px 0px 4px 8px",
+          "icon": {
+            "tag": "standard_icon",
+            "token": "down-small-ccm_outlined",
+            "color": "yellow",
+            "size": "16px 16px"
+          },
+          "icon_position": "right",
+          "icon_expanded_angle": -180
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "*Đang share màn hình hay ngồi chỗ đông người thì đừng mở vội nhé.*"
+          },
+          {
+            "tag": "markdown",
+            "content": "```\n{{NOI_DUNG_NHAY_CAM}}\n```"
+          }
+        ]
+      },
+      {
+        "tag": "collapsible_panel",
+        "expanded": false,
+        "background_color": "blue-50",
+        "border": {
+          "color": "blue",
+          "corner_radius": "6px"
+        },
+        "vertical_spacing": "8px",
+        "padding": "8px 12px 12px 12px",
+        "header": {
+          "title": {
+            "tag": "markdown",
+            "content": "**▶️ Bấm để xem 3 bước làm (2 phút)**"
+          },
+          "vertical_align": "center",
+          "padding": "4px 0px 4px 8px",
+          "icon": {
+            "tag": "standard_icon",
+            "token": "down-small-ccm_outlined",
+            "color": "blue",
+            "size": "16px 16px"
+          },
+          "icon_position": "right",
+          "icon_expanded_angle": -180
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "**1.** {{BUOC_1}}\n\n**2.** {{BUOC_2}}\n\n**3.** {{BUOC_3}}"
+          },
+          {
+            "tag": "markdown",
+            "content": "Kẹt ở bước nào cứ nhắn **{{NGUOI_HO_TRO}}** — làm hộ tận tay."
+          }
+        ]
+      },
+      {
+        "tag": "collapsible_panel",
+        "expanded": false,
+        "background_color": "grey-50",
+        "border": {
+          "color": "grey",
+          "corner_radius": "6px"
+        },
+        "vertical_spacing": "8px",
+        "padding": "8px 12px 12px 12px",
+        "header": {
+          "title": {
+            "tag": "markdown",
+            "content": "**❓ \"{{CAU_HOI_NGUOI_TA_HAY_HOI}}\"**"
+          },
+          "vertical_align": "center",
+          "padding": "4px 0px 4px 8px",
+          "icon": {
+            "tag": "standard_icon",
+            "token": "down-small-ccm_outlined",
+            "color": "grey",
+            "size": "16px 16px"
+          },
+          "icon_position": "right",
+          "icon_expanded_angle": -180
+        },
+        "elements": [
+          {
+            "tag": "markdown",
+            "content": "{{TRA_LOI_NGAN_GON}}"
+          }
+        ]
+      },
+      {
+        "tag": "hr"
+      },
+      {
+        "tag": "column_set",
+        "horizontal_spacing": "8px",
+        "columns": [
+          {
+            "tag": "column",
+            "width": "weighted",
+            "weight": 1,
+            "elements": [
+              {
+                "tag": "button",
+                "text": {
+                  "tag": "plain_text",
+                  "content": "💬 {{CHU_TREN_NUT}}"
+                },
+                "type": "primary",
+                "width": "fill",
+                "behaviors": [
+                  {
+                    "type": "open_url",
+                    "default_url": "{{URL_NGUOI_NHAN_VAO_DUOC}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
