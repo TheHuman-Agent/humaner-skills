@@ -285,3 +285,46 @@ Hỏi không ra thì trước khi kết luận "kho không có", kiểm ba khả
 | `400 Định dạng không được phép` | Đuôi file ngoài danh sách | Đổi sang PDF/DOCX/ảnh |
 | `429 Quá nhiều yêu cầu` | Vượt 120 req/phút | Chờ rồi thử lại, giãn nhịp khi nạp hàng loạt |
 | `status: "failed"` | Pipeline không trích được chữ | Thường là PDF scan — báo IT, file gốc vẫn còn |
+| `curl: (7)` / `(6)` / `Connection refused` | Không tới được máy chủ. Data-Center ra ngoài qua hầm ngược — hầm sập là cả công ty mất, không riêng user. | Thử lại sau 1–2 phút. Vẫn hỏng → **báo Kiên (IT Ops)**, đừng bảo user tự sửa mạng. |
+| `500` / `502` / `503` | Lỗi phía máy chủ | Chờ rồi thử lại. Lặp lại → báo IT kèm giờ và `doc_id`. |
+| `decision: "pending"` quá ~2 phút | File lớn hoặc đang OCR, hàng đợi đọc hiểu có giới hạn | Chờ tiếp, giãn dần. Quá ~5 phút → báo user là đang xử lý chậm, cho `doc_id` để tra lại sau. **Đừng nạp lại** — nạp lại là ra bản trùng. |
+| `400 Token chưa gắn squad lẫn phòng ban` | Chìa khoá cấp thiếu | Xin admin cấp lại. Nạp bằng chìa khoá này thì **không ai đọc được**, kể cả chính user. |
+
+### Tình huống hay gặp — xử lý thế nào
+
+**Windows: cài chìa khoá xong mà vẫn báo thiếu token.**
+`setx` chỉ ghi cho **tiến trình mở sau đó** — `$env:RAG_TOKEN` trong chính cửa sổ
+đang chạy vẫn là giá trị cũ (thường là rỗng). Đừng kết luận là cài hỏng. Kiểm bằng:
+
+```powershell
+[Environment]::GetEnvironmentVariable("RAG_TOKEN","User")
+```
+
+Ra chuỗi `rag_...` là **đã cài đúng** — bảo user mở lại Cowork/terminal là chạy.
+
+**User dán thẳng chìa khoá vào chat.**
+Chìa khoá đã lộ vào lịch sử hội thoại. Vẫn cài giúp, nhưng **nói ngay** với user:
+nhắn Kiên xin thu hồi và phát lại chuỗi mới. Đừng im lặng cho qua, và **đừng in
+lại chuỗi đó** trong câu trả lời của mình.
+
+**User đưa file chìa khoá của người khác** (tên trong file không phải họ).
+Không cài. Nói rõ: mọi câu hỏi sẽ ghi log dưới tên chủ chìa khoá, và người kia
+chịu trách nhiệm. Bảo user xin chìa khoá riêng.
+
+**User muốn xoá / sửa tài liệu đã nạp.**
+Token thường **không có endpoint xoá hay liệt kê**. Nói thật là phải nhờ admin
+xoá tay, và đưa `doc_id` cho họ cầm đi nhờ. Nạp lại bản sửa thì ra **bản mới**,
+bản cũ vẫn nằm trong kho — nhắc user để họ biết mà nhờ gỡ bản cũ.
+
+**User hỏi bao quát kiểu "kho có gì về X" mà không ra gì.**
+Tài liệu trong kho **chưa được gắn nhãn chủ đề**, nên câu hỏi dạng liệt kê /
+bản đồ thường trả về rỗng dù kho có tài liệu thật. Đừng kết luận "kho không có"
+— hỏi lại thật cụ thể, rồi nói rõ giới hạn này cho user.
+
+**Nạp một file hai lần.**
+Không có chống trùng ở mức tài liệu (chỉ khử trùng lặp trong từng file). Nạp lại
+là ra `doc_id` mới. Trước khi nạp hàng loạt, **hỏi user đã nạp lần nào chưa**.
+
+**Server xếp tài liệu cao hơn clearance của chính người nạp.**
+Không phải lỗi, không phải mất file. Xem `readable_by_you` và `evidence_withheld`
+ở Bước 4 — nói rõ để user không tưởng file bay mất.
