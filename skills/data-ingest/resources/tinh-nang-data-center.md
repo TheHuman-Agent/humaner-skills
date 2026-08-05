@@ -100,21 +100,43 @@ Mọi lượt nạp và hỏi đều ghi log gắn với danh tính của token.
 
 ---
 
-## 3. Kho hiện có gì (chốt 05/08/2026)
+## 3. Kho hiện có gì — ĐỪNG trả lời bằng file này
+
+> ⛔ **Không đọc số dưới đây cho user như thể đó là kho của họ.**
+> **Mỗi chìa khoá thấy một lượng khác nhau.** Squad khác nhau không thấy của
+> nhau, clearance thấp không thấy tài liệu cấp cao. Con số toàn kho là **góc
+> nhìn admin**, không phải góc nhìn người đang hỏi — đọc nguyên si ra là hứa
+> với user những tài liệu họ không bao giờ mở được.
+
+**User hỏi "kho có gì / có bao nhiêu tài liệu" thì làm thế này:**
+
+1. Gọi `GET /api/policy` → biết user đứng tên **squad** nào, **clearance** mấy.
+2. Hỏi thẳng kho bằng **chính chìa khoá của user** qua `POST /api/v1/query`.
+   Kết quả trả về đã lọc sẵn theo quyền của họ — đó mới là câu trả lời đúng.
+3. Trả lời theo cái lấy được, kèm nguồn. Nếu ít, nói rõ **có thể do quyền** chứ
+   không phải kho trống (xem mục 6).
+
+Hiện **chưa có cửa API đếm số tài liệu** theo quyền người gọi. Nên đừng bịa ra
+con số cho user — hỏi cụ thể rồi trả lời theo cái tìm được.
+
+<details>
+<summary>Số toàn kho, chốt 05/08/2026 — chỉ để định cỡ, KHÔNG đọc cho user</summary>
 
 | | Số |
 |---|---|
-| Tài liệu đã sẵn sàng tra cứu | **588** |
+| Tài liệu đã sẵn sàng tra cứu | 588 |
 | Tài liệu nạp hỏng (chưa trích được chữ) | 206 |
-| Đoạn văn đã nhúng vector | **4.482** |
+| Đoạn văn đã nhúng vector | 4.482 |
 
-Theo cấp mật: **L1 156 · L2 572 · L3 21 · L4 46**
+Theo cấp mật: L1 156 · L2 572 · L3 21 · L4 46
 
 Theo phòng (chapter): compliance 606 · marketing 82 · sales 50 · hr 30 · accounting 27
 
-> Con số phòng ban phản ánh **ai nạp**, không phải nội dung nói về gì — hệ thống
-> gắn phòng theo danh tính người nạp. Đừng dùng bảng này để kết luận "kho có
-> nhiều tài liệu compliance".
+Con số phòng ban phản ánh **ai nạp**, không phải nội dung nói về gì — hệ thống
+gắn phòng theo danh tính người nạp. Đừng dùng bảng này để kết luận "kho có nhiều
+tài liệu compliance".
+
+</details>
 
 ---
 

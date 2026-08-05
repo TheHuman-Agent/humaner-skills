@@ -1,16 +1,22 @@
 ---
 name: data-ingest
-description: Đẩy tài liệu lên Data-Center (RAG nội bộ) và tra cứu lại, đúng luật phân cấp mật của công ty. Gửi file, rồi đọc phán quyết cấp mật kèm dẫn chứng do server tự quyết. Kích hoạt khi user muốn nạp tài liệu vào Data-center, đẩy file lên RAG, hỏi dữ liệu nội bộ công ty, hoặc gọi @data-ingest / /data-ingest. Cũng kích hoạt khi user đưa file Chia-khoa-Data-Center-*.txt, dán chuỗi bắt đầu bằng rag_, hoặc nhờ "cài chìa khoá Data-Center" — skill tự cài chìa khoá vào máy. Và khi user hỏi Data-Center / rag.wealify.app là gì, làm được gì, có hỏi được X không, kho đang có gì, sao không tìm thấy tài liệu — đọc resources/tinh-nang-data-center.md rồi trả lời.
+description: Đẩy tài liệu lên Data-Center (RAG nội bộ) và tra cứu lại, đúng luật phân cấp mật của công ty. Gửi file, rồi đọc phán quyết cấp mật kèm dẫn chứng do server tự quyết. Kích hoạt khi user muốn nạp tài liệu vào Data-center, đẩy file lên RAG, hỏi dữ liệu nội bộ công ty, hoặc gọi @data-ingest / /data-ingest. Cũng kích hoạt khi user đưa file Chia-khoa-Data-Center-*.txt, dán chuỗi bắt đầu bằng rag_, hoặc nhờ "cài chìa khoá Data-Center" — skill tự cài chìa khoá vào máy. Và khi user hỏi Data-Center / rag.wealify.app là gì, làm được gì, có hỏi được X không, sao không tìm thấy tài liệu — đọc resources/tinh-nang-data-center.md rồi trả lời; riêng "kho có gì" thì phải hỏi kho bằng chính chìa khoá của user chứ không đọc số trong file.
 ---
 
 # data-ingest — Cửa nạp & tra cứu Data-Center
 
 > 📖 **User hỏi hệ thống LÀM ĐƯỢC GÌ → đọc [`resources/tinh-nang-data-center.md`](resources/tinh-nang-data-center.md) trước khi trả lời.**
-> File đó mô tả đầy đủ tính năng, số liệu kho hiện tại, và **những thứ hệ thống
-> chưa làm được**. Đọc nó khi user hỏi kiểu *"Data-Center là gì"*, *"rag.wealify.app
-> làm được gì"*, *"có hỏi được X không"*, *"kho đang có bao nhiêu tài liệu"*,
-> *"sao em không tìm thấy"*, *"sao vào web nó đòi đăng nhập"*. **Đừng trả lời
-> bằng suy đoán** — hứa tính năng không có làm user mất công đi tìm.
+> File đó mô tả đầy đủ tính năng và **những thứ hệ thống chưa làm được**. Đọc nó
+> khi user hỏi kiểu *"Data-Center là gì"*, *"rag.wealify.app làm được gì"*,
+> *"có hỏi được X không"*, *"sao em không tìm thấy"*, *"sao vào web nó đòi đăng
+> nhập"*. **Đừng trả lời bằng suy đoán** — hứa tính năng không có làm user mất
+> công đi tìm.
+>
+> ⛔ **Riêng "kho có gì / bao nhiêu tài liệu" thì KHÔNG trả lời bằng file.**
+> Mỗi chìa khoá thấy một lượng khác nhau. Phải hỏi thẳng kho **bằng chính chìa
+> khoá của user** (`/api/policy` để biết họ là ai, rồi `/api/v1/query`) — kết quả
+> đã lọc sẵn theo quyền của họ. Số trong file là góc nhìn admin, đọc ra là hứa
+> nhầm những tài liệu user không mở được.
 >
 > SKILL.md này là *cách dùng* (cú pháp, quy trình). File kia là *năng lực và giới hạn*.
 
