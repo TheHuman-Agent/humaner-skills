@@ -111,7 +111,7 @@ Mọi lượt nạp và hỏi đều ghi log gắn với danh tính của token.
 **User hỏi "kho có gì / có bao nhiêu tài liệu" thì làm thế này:**
 
 1. Gọi `GET /api/policy` → biết user đứng tên **squad** nào, **clearance** mấy.
-2. Hỏi thẳng kho bằng **chính chìa khoá của user** qua `POST /api/v1/query`.
+2. Hỏi thẳng kho bằng **chính chìa khoá của user** qua `POST /api/v1/search`.
    Kết quả trả về đã lọc sẵn theo quyền của họ — đó mới là câu trả lời đúng.
 3. Trả lời theo cái lấy được, kèm nguồn. Nếu ít, nói rõ **có thể do quyền** chứ
    không phải kho trống (xem mục 6).
@@ -161,7 +161,8 @@ tài liệu compliance".
 | `GET /api/policy` | Xem token đứng tên squad/phòng nào, clearance mấy. Kiêm luôn pre-flight. |
 | `POST /api/v1/ingest` | Gửi file lên. Trả phán quyết **sơ bộ theo tên file**. |
 | `GET /api/v1/ingest/{doc_id}/verdict` | Lấy phán quyết **cuối** sau khi đọc hiểu xong. |
-| `POST /api/v1/query` | Hỏi, nhận câu trả lời + nguồn. |
+| `POST /api/v1/search` | Hỏi, nhận **các đoạn tài liệu gốc** kèm tên file, giờ nạp, cấp mật, điểm liên quan. Server **không** viết câu trả lời — agent tự đọc. Đây là cửa tra cứu chuẩn. |
+| `POST /api/v1/query` | Hỏi, **server tự viết** câu trả lời + nguồn. Chỉ dành cho bên gọi **không có model nào** (script, cron, webhook) — agent dùng cửa này là tiêu token hai lần cho một câu hỏi. |
 
 Giới hạn **120 lượt/phút** cho mỗi client. Nạp hàng loạt thì giãn ~0.6s/file.
 
